@@ -50,54 +50,56 @@ function spaceBlank(spaceNum) {
   return typeof( spaces[spaceNum] ) === 'number';
 }
 
-function enableClick() {
-  $(document).on('click', '#board .space', function (e) {
-    var spaceNum = $(e.currentTarget).index();
-    console.log('You clicked on space #' + spaceNum);
+// function enableClick() {
+//   $(document).on('click', '#board .space', function (e) {
+//     var spaceNum = $(e.currentTarget).index();
+//     console.log('You clicked on space #' + spaceNum);
 
-    // Marks the space with the current player's name
-    // TODO: Don't mark it unless the space is blank
-    if ( spaceBlank(spaceNum) ) {
-      spaces[spaceNum] = currentPlayer;
+//     // Marks the space with the current player's name
+//     // TODO: Don't mark it unless the space is blank
+//     if ( spaceBlank(spaceNum) ) {
+//       spaces[spaceNum] = currentPlayer;
 
-      // Adds a class to elem so css can take care of the visuals
-      $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+//       // Adds a class to elem so css can take care of the visuals
+//       $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
 
-      if ( checkForWinner() ) {
-        console.log('somebody won');
-        // TODO: Trigger 'game-win' event with the winning player as the event data
-        $(document).trigger("game-win", currentPlayer);
-      } else {
-        setNextTurn();
-      }
-    }
-  });
-}
-
-// $(document).on('click', '#board .space', function (e) {
-//   var spaceNum = $(e.currentTarget).index();
-//   console.log('You clicked on space #' + spaceNum);
-
-//   // Marks the space with the current player's name
-//   // TODO: Don't mark it unless the space is blank
-//   if ( spaceNotBlank(spaceNum) ) {
-//     spaces[spaceNum] = currentPlayer;
-//     // Adds a class to elem so css can take care of the visuals
-//     $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
-
-//     if ( checkForWinner() ) {
-//       console.log('somebody won');
-//       // TODO: Trigger 'game-win' event with the winning player as the event data
-//       $(document).trigger("game-win", currentPlayer);
-//     } else {
-//       setNextTurn();
+//       if ( checkForWinner() ) {
+//         console.log('somebody won');
+//         // TODO: Trigger 'game-win' event with the winning player as the event data
+//         $(document).trigger("game-win", currentPlayer);
+//       } else {
+//         setNextTurn();
+//       }
 //     }
-//   }
-// });
+//   });
+// }
+
+$('#board').on('click', '.space', function (e) {
+  var spaceNum = $(e.currentTarget).index();
+  console.log('You clicked on space #' + spaceNum);
+
+  // Marks the space with the current player's name
+  // TODO: Don't mark it unless the space is blank
+  if ( spaceBlank(spaceNum) ) {
+    spaces[spaceNum] = currentPlayer;
+    // Adds a class to elem so css can take care of the visuals
+    $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+
+    if ( checkForWinner() ) {
+      console.log('somebody won');
+      // TODO: Trigger 'game-win' event with the winning player as the event data
+      $(document).trigger("game-win", currentPlayer);
+      console.log("how many times is this running");
+    } else {
+      setNextTurn();
+    }
+  }
+});
+console.log("how many times is this running? 2");
 
 function startGame() {
   clearSpaces();
-  enableClick();
+  // enableClick();
   setNextTurn();
 }
 
@@ -114,10 +116,10 @@ function clearSpaces() {
 
 $(document).on('game-win', function (e, winner) {
   // TODO: Alert who won the game
-  setText(winner + " won the game!")
-  $(document).on('click', '#board .space', function (e) {
-    playAgain();
-  });
+  setText(winner + " won the game!");
+  // $(document).on('click', '#board .space', function (e) {
+  playAgain();
+  // });
 });
 
 // Start the game
