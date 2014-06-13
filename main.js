@@ -1,10 +1,14 @@
-
+var newGame = function() {
 // Using NaN instead of null is a clever hack. See checkForWinner for details.
 var spaces = [
   NaN, NaN, NaN,
   NaN, NaN, NaN,
   NaN, NaN, NaN
 ];
+
+var grid = [ [0,1,2],[3,4,5],[6,7,8],
+             [0,3,6],[1,4,7],[2,5,8],
+             [0,4,8],[2,4,6] ];
 
 var player1 = 'veggies';
 var player2 = 'junkfood';
@@ -17,42 +21,107 @@ var setNextTurn = function () {
   else {
     currentPlayer = player1;
   }
-  $('#turn-label').text(currentPlayer);
+  // $('#turn-label').text(currentPlayer);
+  setText("It's " + currentPlayer + "'s turn.")
 };
+
+function setText(text) {
+  $('#msg').text(text);
+}
 
 var checkForWinner = function () {
   // Because (NaN === NaN) is always false, we can safely assume
   // that if three spaces in a row are the same, all three spaces are
   // marked by a player, and not all empty.
 
-  if ( spaces[0] === spaces[1] && spaces[1] === spaces[2]
-    || spaces[3] === spaces[4] && spaces[4] === spaces[5]
-    || spaces[6] === spaces[7] && spaces[7] === spaces[8]
-    // TODO: Check for rest of game winning cases
-  )
-  {
-    console.log('somebody won');
-    // TODO: Trigger 'game-win' event with the winning player as the event data
+  for(var i = 0; i < grid.length; i++) {
+    space1 = spaces[ grid[i][0] ];
+    space2 = spaces[ grid[i][1] ];
+    space3 = spaces[ grid[i][2] ];
+
+    if (space1 === space2 && space2 === space3) {
+      return true;
+    }
   }
+  return false;
 };
 
-$(document).on('click', '#board .space', function (e) {
-  var spaceNum = $(e.currentTarget).index();
-  console.log('You clicked on space #' + spaceNum);
+function spaceBlank(spaceNum) {
+  return typeof( spaces[spaceNum] ) === 'number';
+}
 
-  // Marks the space with the current player's name
-  // TODO: Don't mark it unless the space is blank
-  spaces[spaceNum] = currentPlayer;
-  // Adds a class to elem so css can take care of the visuals
-  $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+function enableClick() {
+  $(document).on('click', '#board .space', function (e) {
+    var spaceNum = $(e.currentTarget).index();
+    console.log('You clicked on space #' + spaceNum);
 
-  checkForWinner();
+    // Marks the space with the current player's name
+    // TODO: Don't mark it unless the space is blank
+    if ( spaceBlank(spaceNum) ) {
+      spaces[spaceNum] = currentPlayer;
+
+      // Adds a class to elem so css can take care of the visuals
+      $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+
+      if ( checkForWinner() ) {
+        console.log('somebody won');
+        // TODO: Trigger 'game-win' event with the winning player as the event data
+        $(document).trigger("game-win", currentPlayer);
+      } else {
+        setNextTurn();
+      }
+    }
+  });
+}
+
+// $(document).on('click', '#board .space', function (e) {
+//   var spaceNum = $(e.currentTarget).index();
+//   console.log('You clicked on space #' + spaceNum);
+
+//   // Marks the space with the current player's name
+//   // TODO: Don't mark it unless the space is blank
+//   if ( spaceNotBlank(spaceNum) ) {
+//     spaces[spaceNum] = currentPlayer;
+//     // Adds a class to elem so css can take care of the visuals
+//     $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+
+//     if ( checkForWinner() ) {
+//       console.log('somebody won');
+//       // TODO: Trigger 'game-win' event with the winning player as the event data
+//       $(document).trigger("game-win", currentPlayer);
+//     } else {
+//       setNextTurn();
+//     }
+//   }
+// });
+
+function startGame() {
+  clearSpaces();
+  enableClick();
   setNextTurn();
-});
+}
+
+function playAgain() {
+  if ( confirm("Do you want to play again?") ) {
+    newGame();
+  }
+}
+
+function clearSpaces() {
+  $('#board .space').removeClass(player1);
+  $('#board .space').removeClass(player2);
+}
 
 $(document).on('game-win', function (e, winner) {
   // TODO: Alert who won the game
+  setText(winner + " won the game!")
+  $(document).on('click', '#board .space', function (e) {
+    playAgain();
+  });
 });
 
 // Start the game
-setNextTurn();
+startGame();
+};
+
+newGame();
