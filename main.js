@@ -1,18 +1,18 @@
 var newGame = function() {
 // Using NaN instead of null is a clever hack. See checkForWinner for details.
+
 var spaces = [
   NaN, NaN, NaN,
   NaN, NaN, NaN,
   NaN, NaN, NaN
 ];
+var player1 = 'veggies';
+var player2 = 'junkfood';
+var currentPlayer = null;
 
 var grid = [ [0,1,2],[3,4,5],[6,7,8],
              [0,3,6],[1,4,7],[2,5,8],
              [0,4,8],[2,4,6] ];
-
-var player1 = 'veggies';
-var player2 = 'junkfood';
-var currentPlayer = null;
 
 var setNextTurn = function () {
   if (currentPlayer === player1) {
@@ -95,17 +95,25 @@ $('#board').on('click', '.space', function (e) {
     }
   }
 });
-console.log("how many times is this running? 2");
 
 function startGame() {
+  spaces = [
+    NaN, NaN, NaN,
+    NaN, NaN, NaN,
+    NaN, NaN, NaN
+  ];
+  player1 = 'veggies';
+  player2 = 'junkfood';
+  currentPlayer = null;
+
   clearSpaces();
-  // enableClick();
   setNextTurn();
 }
 
 function playAgain() {
   if ( confirm("Do you want to play again?") ) {
-    newGame();
+    // newGame();
+    startGame();
   }
 }
 
