@@ -2,6 +2,7 @@
   $('#turn').text("It's " + game.currentPlayer + "'s turn.");
   $('#score1').text(game.player1 + ": " + game.player1Score);
   $('#score2').text(game.player2 + ": " + game.player2Score);
+  $('#button-box').hide();
 
   $('#board').on('click', '.space', function (e) {
     var spaceNum = $(e.currentTarget).index();
@@ -28,12 +29,27 @@
     $('#score1').text(game.player1 + ": " + game.player1Score);
     $('#score2').text(game.player2 + ": " + game.player2Score);
 
+    $('#board').hide();
+    $('#button-box').show();
+
+    // $('#button').removeClass('disabled');
+
     // setText(winner + " won the game!");
-    if ( confirm("Do you want to play again?") ) {
+    // if ( confirm("Do you want to play again?") ) {
+    //   $('#board .space').removeClass(game.player1);
+    //   $('#board .space').removeClass(game.player2);
+
+    //   game.start();
+    // }
+  });
+
+  $('#button').on('click', function() {
+      $('#board').show();
+      $('#button-box').hide();
+
       $('#board .space').removeClass(game.player1);
       $('#board .space').removeClass(game.player2);
 
       game.start();
-    }
   });
 })();
