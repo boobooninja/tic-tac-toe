@@ -52,20 +52,33 @@
     };
 
     this.markSpace = function(spaceNum) {
-      spaces[spaceNum] = this.currentPlayer;
+      console.log('markSpace : ' + this.currentPlayer);
+
+      if (this.currentPlayer === this.player1) {
+        spaces[spaceNum] = 'player1';
+        return 'player1';
+      } else if (this.currentPlayer === this.player2) {
+        spaces[spaceNum] = 'player2';
+        return 'player2';
+      }
     };
 
     this.spaceBlank = function(spaceNum) {
       return typeof( spaces[spaceNum] ) === 'number';
     }
 
-    this.start = function() {
+    this.start = function(p1, p2) {
       spaces = [ NaN, NaN, NaN,
                  NaN, NaN, NaN,
                  NaN, NaN, NaN ];
 
-      this.player1 = 'veggies';
-      this.player2 = 'junkfood';
+      if (this.player1 !== p1 || this.player2 !== p2) {
+        this.player1 = p1;
+        this.player1Score = 0;
+        this.player2 = p2;
+        this.player2Score = 0;
+      }
+
       this.currentPlayer = null;
 
       this.setNextTurn();
