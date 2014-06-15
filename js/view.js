@@ -24,11 +24,16 @@
       //   var av = game.avatar2;
       // }
 
-      // var styles = { background: url(av);
-      //                background-size: 100% 100%;
+      // if (av) {
+      //   $('#board .space:eq(' + spaceNum + ')').css('background-image', 'url(' + av + ')');
+      // }
+
+
+      // var styles = { background: url(av),
+      //                background-size: 100% 100%
       //              };
 
-      // $('#board .space:eq(' + spaceNum + ')').css(styles);
+      // $('#board .space:eq(' + spaceNum + ')').css('background-image', 'url(' + av + ')');
 
       if ( game.checkForWinner() ) {
         console.log(game.currentPlayer + 'won!');
@@ -80,10 +85,17 @@
   $('#start-game').on('click', function() {
     var p1 = $('#player1').val();
     var p2 = $('#player2').val();
-    // var p1Avatar = $('#avatar1').val();
-    // var p2Avatar = $('#avatar2').val();
+    var p1Avatar = $('#avatar1').val();
+    var p2Avatar = $('#avatar2').val();
 
-    // game.setAvatar(p1Avatar, p2Avatar);
+    game.setAvatar(p1Avatar, p2Avatar);
+
+    if (game.avatar1) {
+      $("<style type='text/css'>#board .space.player1{ background-image: url("+game.avatar1+"); background-size: 100% 100%;}</style>").appendTo("head");
+    }
+    if (game.avatar2) {
+      $("<style type='text/css'>#board .space.player2{ background-image: url("+game.avatar2+"); background-size: 100% 100%;}</style>").appendTo("head");
+    }
 
     $('#my-box').show();
     $('#board').show();
@@ -95,13 +107,13 @@
     $(document).trigger("update-turn", turnText);
   });
 
-  // $("#add-avatar1").on('click', function() {
-  //   $('<input type="text" id="avatar1" placeholder="url to image">').insertAfter(this);
-  //   $(this).remove();
-  // });
-  // $("#add-avatar2").on('click', function() {
-  //   $('<input type="text" id="avatar2" placeholder="url to image">').insertAfter(this);
-  //   $(this).remove();
-  // });
+  $("#add-avatar1").on('click', function() {
+    $('<input type="text" id="avatar1" placeholder="url to image">').insertAfter(this);
+    $(this).remove();
+  });
+  $("#add-avatar2").on('click', function() {
+    $('<input type="text" id="avatar2" placeholder="url to image">').insertAfter(this);
+    $(this).remove();
+  });
 
 })();

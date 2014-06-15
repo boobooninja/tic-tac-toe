@@ -56,10 +56,10 @@
       return typeof( this.spaces[spaceNum] ) === 'number';
     }
 
-    // this.setAvatar = function(p1Avatar, p2Avatar) {
-    //   this.avatar1 = typeof( p1Avatar ) !== 'undefined' ? p1Avatar : "../img/veggies.jpg";
-    //   this.avatar2 = typeof( p2Avatar ) !== 'undefined' ? p2Avatar : "../img/junkfood.jpg";
-    // };
+    this.setAvatar = function(p1Avatar, p2Avatar) {
+      this.avatar1 = p1Avatar;
+      this.avatar2 = p2Avatar;
+    };
 
     this.start = function(p1, p2) {
       this.spaces = [ NaN, NaN, NaN,
