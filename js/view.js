@@ -1,10 +1,9 @@
 (function() {
-  $('#player1').val('veggies');
-  $('#player2').val('junkfood');
+  $('#player1').val( game.player1 );
+  $('#player2').val( game.player2 );
 
-  $('#turn').text("It's " + game.currentPlayer + "'s turn.");
-  $('#score1').text(game.player1 + ": " + game.player1Score);
-  $('#score2').text(game.player2 + ": " + game.player2Score);
+  $(document).trigger("update-turn", ("It's " + game.currentPlayer + "'s turn."));
+
   $('#button-box').hide();
   $('#my-box').hide();
   $('#my-form').show();
@@ -19,6 +18,18 @@
       // Adds a class to elem so css can take care of the visuals
       $('#board .space:eq(' + spaceNum + ')').addClass(klass);
 
+      // if (klass === 'player1') {
+      //   var av = game.avatar1;
+      // } else {
+      //   var av = game.avatar2;
+      // }
+
+      // var styles = { background: url(av);
+      //                background-size: 100% 100%;
+      //              };
+
+      // $('#board .space:eq(' + spaceNum + ')').css(styles);
+
       if ( game.checkForWinner() ) {
         console.log(game.currentPlayer + 'won!');
         $(document).trigger("game-win", game.currentPlayer);
@@ -30,12 +41,22 @@
   });
 
   $(document).on('game-win', function (e, winner) {
-    $('#turn').text(winner + " won the game!");
-    $('#score1').text(game.player1 + ": " + game.player1Score);
-    $('#score2').text(game.player2 + ": " + game.player2Score);
+    var turnText = winner + " won the game!";
+    $(document).trigger("update-turn", turnText);
+
+    // $('#turn').text(winner + " won the game!");
+    // $('#score1').text(game.player1 + ": " + game.player1Score);
+    // $('#score2').text(game.player2 + ": " + game.player2Score);
 
     $('#board').hide();
     $('#button-box').show();
+  });
+
+  $(document).on('update-turn', function(e, turnText) {
+    // $('#turn').text("It's " + game.currentPlayer + "'s turn.");
+    $('#turn').text(turnText);
+    $('#score1').text(game.player1 + ": " + game.player1Score);
+    $('#score2').text(game.player2 + ": " + game.player2Score);
   });
 
   $('#continue').on('click', function() {
@@ -59,8 +80,10 @@
   $('#start-game').on('click', function() {
     var p1 = $('#player1').val();
     var p2 = $('#player2').val();
+    // var p1Avatar = $('#avatar1').val();
+    // var p2Avatar = $('#avatar2').val();
 
-console.log("p1: " + p1);
+    // game.setAvatar(p1Avatar, p2Avatar);
 
     $('#my-box').show();
     $('#board').show();
@@ -68,10 +91,17 @@ console.log("p1: " + p1);
 
     game.start(p1, p2);
 
-    $('#turn').text("It's " + game.currentPlayer + "'s turn.");
-    $('#score1').text(game.player1 + ": " + game.player1Score);
-    $('#score2').text(game.player2 + ": " + game.player2Score);
-
+    var turnText = "It's " + game.currentPlayer + "'s turn.";
+    $(document).trigger("update-turn", turnText);
   });
+
+  // $("#add-avatar1").on('click', function() {
+  //   $('<input type="text" id="avatar1" placeholder="url to image">').insertAfter(this);
+  //   $(this).remove();
+  // });
+  // $("#add-avatar2").on('click', function() {
+  //   $('<input type="text" id="avatar2" placeholder="url to image">').insertAfter(this);
+  //   $(this).remove();
+  // });
 
 })();
